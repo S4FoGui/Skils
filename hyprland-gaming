@@ -1,0 +1,923 @@
+---
+name: hyprland-gaming
+description: >
+  Guia de referência rápida para configurar e rodar games no Hyprland (Wayland, Arch Linux).
+  Esta versão inclui configurações específicas para os 100 jogos mais populares.
+  Use esta skill sempre que o usuário mencionar: gaming no Hyprland, configurar Steam/Lutris/Proton
+  no Hyprland, window rules para jogos, GameMode, gamescope, travamento/stuttering em games no
+  Wayland, FPS baixo no Hyprland, ou qualquer problema com jogos em compositor Wayland.
+  Acione também se o usuário pedir para otimizar o hyprland.conf para games ou criar scripts
+  de toggle de animações para jogos.
+---
+
+# Hyprland Gaming — Referência Rápida (2026)
+
+## 1. Pacotes Essenciais
+
+```bash
+# AMD (padrão)
+sudo pacman -S steam gamescope mangohud gamemode \
+  vulkan-radeon mesa lib32-mesa \
+  vulkan-icd-loader lib32-vulkan-icd-loader \
+  wine-staging winetricks lutris
+
+# Nvidia — troque vulkan-radeon por:
+# nvidia-dkms nvidia-utils lib32-nvidia-utils
+```
+
+**Steam Play**: Steam → Settings → Steam Play → *Enable for all titles* → Proton Experimental
+
+**Wayland nativo no Steam** (opções de lançamento):
+```
+# AMD/Intel
+PROTON_ENABLE_WAYLAND=1 %command%
+
+# Nvidia
+__GLX_VENDOR_LIBRARY_NAME=nvidia PROTON_ENABLE_WAYLAND=1 %command%
+```
+
+---
+
+## 2. hyprland.conf — Seção Gaming (100 Jogos)
+
+```ini
+# ~/.config/hypr/hyprland.conf
+
+# ── Regras de Janela Genéricas para Jogos ──────────────────────────────
+windowrulev2 = tag +games, class:^(steam_app_\d+)$ # Regra genérica para jogos Steam
+windowrulev2 = fullscreen,       tag:games
+windowrulev2 = workspace 10 silent, tag:games
+windowrulev2 = noblur,           tag:games
+windowrulev2 = noshadow,         tag:games
+windowrulev2 = immediate,        tag:games   # sem delay de foco
+
+# ── Regras de Janela Específicas por Jogo ──────────────────────────────
+# Para jogos Steam, a classe geralmente é steam_app_<APPID>.
+# Para jogos não-Steam, use `hyprctl clients | grep class` para encontrar a classe correta e ajuste.
+
+# 1. Counter-Strike 2
+windowrulev2 = tag +games, class:^(steam_app_730)$
+windowrulev2 = fullscreen, class:^(steam_app_730)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_730)$
+windowrulev2 = noblur, class:^(steam_app_730)$
+windowrulev2 = noshadow, class:^(steam_app_730)$
+windowrulev2 = immediate, class:^(steam_app_730)$
+
+# 2. Dota 2
+windowrulev2 = tag +games, class:^(steam_app_570)$
+windowrulev2 = fullscreen, class:^(steam_app_570)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_570)$
+windowrulev2 = noblur, class:^(steam_app_570)$
+windowrulev2 = noshadow, class:^(steam_app_570)$
+windowrulev2 = immediate, class:^(steam_app_570)$
+
+# 3. PUBG: BATTLEGROUNDS
+windowrulev2 = tag +games, class:^(steam_app_578080)$
+windowrulev2 = fullscreen, class:^(steam_app_578080)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_578080)$
+windowrulev2 = noblur, class:^(steam_app_578080)$
+windowrulev2 = noshadow, class:^(steam_app_578080)$
+windowrulev2 = immediate, class:^(steam_app_578080)$
+
+# 4. FiveM (Grand Theft Auto V)
+windowrulev2 = tag +games, class:^(steam_app_271590)$ # Verifique a classe exata para FiveM se for diferente
+windowrulev2 = fullscreen, class:^(steam_app_271590)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_271590)$
+windowrulev2 = noblur, class:^(steam_app_271590)$
+windowrulev2 = noshadow, class:^(steam_app_271590)$
+windowrulev2 = immediate, class:^(steam_app_271590)$
+
+# 5. Rust
+windowrulev2 = tag +games, class:^(steam_app_252490)$
+windowrulev2 = fullscreen, class:^(steam_app_252490)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_252490)$
+windowrulev2 = noblur, class:^(steam_app_252490)$
+windowrulev2 = noshadow, class:^(steam_app_252490)$
+windowrulev2 = immediate, class:^(steam_app_252490)$
+
+# 6. Bongo Cat
+windowrulev2 = tag +games, class:^(steam_app_1341480)$
+windowrulev2 = fullscreen, class:^(steam_app_1341480)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1341480)$
+windowrulev2 = noblur, class:^(steam_app_1341480)$
+windowrulev2 = noshadow, class:^(steam_app_1341480)$
+windowrulev2 = immediate, class:^(steam_app_1341480)$
+
+# 7. Apex Legends
+windowrulev2 = tag +games, class:^(steam_app_1172470)$
+windowrulev2 = fullscreen, class:^(steam_app_1172470)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1172470)$
+windowrulev2 = noblur, class:^(steam_app_1172470)$
+windowrulev2 = noshadow, class:^(steam_app_1172470)$
+windowrulev2 = immediate, class:^(steam_app_1172470)$
+
+# 8. Slay the Spire 2
+windowrulev2 = tag +games, class:^(steam_app_2868840)$
+windowrulev2 = fullscreen, class:^(steam_app_2868840)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2868840)$
+windowrulev2 = noblur, class:^(steam_app_2868840)$
+windowrulev2 = noshadow, class:^(steam_app_2868840)$
+windowrulev2 = immediate, class:^(steam_app_2868840)$
+
+# 9. ARC Raiders
+windowrulev2 = tag +games, class:^(steam_app_1808500)$
+windowrulev2 = fullscreen, class:^(steam_app_1808500)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1808500)$
+windowrulev2 = noblur, class:^(steam_app_1808500)$
+windowrulev2 = noshadow, class:^(steam_app_1808500)$
+windowrulev2 = immediate, class:^(steam_app_1808500)$
+
+# 10. Windrose
+windowrulev2 = tag +games, class:^(steam_app_2432820)$
+windowrulev2 = fullscreen, class:^(steam_app_2432820)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2432820)$
+windowrulev2 = noblur, class:^(steam_app_2432820)$
+windowrulev2 = noshadow, class:^(steam_app_2432820)$
+windowrulev2 = immediate, class:^(steam_app_2432820)$
+
+# 11. Grand Theft Auto V
+windowrulev2 = tag +games, class:^(steam_app_271590)$
+windowrulev2 = fullscreen, class:^(steam_app_271590)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_271590)$
+windowrulev2 = noblur, class:^(steam_app_271590)$
+windowrulev2 = noshadow, class:^(steam_app_271590)$
+windowrulev2 = immediate, class:^(steam_app_271590)$
+
+# 12. Tom Clancy's Rainbow Six Siege
+windowrulev2 = tag +games, class:^(steam_app_359550)$
+windowrulev2 = fullscreen, class:^(steam_app_359550)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_359550)$
+windowrulev2 = noblur, class:^(steam_app_359550)$
+windowrulev2 = noshadow, class:^(steam_app_359550)$
+windowrulev2 = immediate, class:^(steam_app_359550)$
+
+# 13. R.E.P.O.
+windowrulev2 = tag +games, class:^(steam_app_2639010)$
+windowrulev2 = fullscreen, class:^(steam_app_2639010)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2639010)$
+windowrulev2 = noblur, class:^(steam_app_2639010)$
+windowrulev2 = noshadow, class:^(steam_app_2639010)$
+windowrulev2 = immediate, class:^(steam_app_2639010)$
+
+# 14. Deadlock
+windowrulev2 = tag +games, class:^(steam_app_1422450)$
+windowrulev2 = fullscreen, class:^(steam_app_1422450)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1422450)$
+windowrulev2 = noblur, class:^(steam_app_1422450)$
+windowrulev2 = noshadow, class:^(steam_app_1422450)$
+windowrulev2 = immediate, class:^(steam_app_1422450)$
+
+# 15. Marvel Rivals
+windowrulev2 = tag +games, class:^(steam_app_2767030)$
+windowrulev2 = fullscreen, class:^(steam_app_2767030)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2767030)$
+windowrulev2 = noblur, class:^(steam_app_2767030)$
+windowrulev2 = noshadow, class:^(steam_app_2767030)$
+windowrulev2 = immediate, class:^(steam_app_2767030)$
+
+# 16. War Thunder
+windowrulev2 = tag +games, class:^(steam_app_236390)$
+windowrulev2 = fullscreen, class:^(steam_app_236390)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_236390)$
+windowrulev2 = noblur, class:^(steam_app_236390)$
+windowrulev2 = noshadow, class:^(steam_app_236390)$
+windowrulev2 = immediate, class:^(steam_app_236390)$
+
+# 17. Geometry Dash
+windowrulev2 = tag +games, class:^(steam_app_322170)$
+windowrulev2 = fullscreen, class:^(steam_app_322170)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_322170)$
+windowrulev2 = noblur, class:^(steam_app_322170)$
+windowrulev2 = noshadow, class:^(steam_app_322170)$
+windowrulev2 = immediate, class:^(steam_app_322170)$
+
+# 18. EA SPORTS FC™ 26
+windowrulev2 = tag +games, class:^(steam_app_2882140)$
+windowrulev2 = fullscreen, class:^(steam_app_2882140)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2882140)$
+windowrulev2 = noblur, class:^(steam_app_2882140)$
+windowrulev2 = noshadow, class:^(steam_app_2882140)$
+windowrulev2 = immediate, class:^(steam_app_2882140)$
+
+# 19. Dead by Daylight
+windowrulev2 = tag +games, class:^(steam_app_381210)$
+windowrulev2 = fullscreen, class:^(steam_app_381210)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_381210)$
+windowrulev2 = noblur, class:^(steam_app_381210)$
+windowrulev2 = noshadow, class:^(steam_app_381210)$
+windowrulev2 = immediate, class:^(steam_app_381210)$
+
+# 20. Warframe
+windowrulev2 = tag +games, class:^(steam_app_230410)$
+windowrulev2 = fullscreen, class:^(steam_app_230410)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_230410)$
+windowrulev2 = noblur, class:^(steam_app_230410)$
+windowrulev2 = noshadow, class:^(steam_app_230410)$
+windowrulev2 = immediate, class:^(steam_app_230410)$
+
+# 21. Overwatch 2
+windowrulev2 = tag +games, class:^(steam_app_2357570)$
+windowrulev2 = fullscreen, class:^(steam_app_2357570)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2357570)$
+windowrulev2 = noblur, class:^(steam_app_2357570)$
+windowrulev2 = noshadow, class:^(steam_app_2357570)$
+windowrulev2 = immediate, class:^(steam_app_2357570)$
+
+# 22. Delta Force
+windowrulev2 = tag +games, class:^(steam_app_2507950)$
+windowrulev2 = fullscreen, class:^(steam_app_2507950)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2507950)$
+windowrulev2 = noblur, class:^(steam_app_2507950)$
+windowrulev2 = noshadow, class:^(steam_app_2507950)$
+windowrulev2 = immediate, class:^(steam_app_2507950)$
+
+# 23. Crimson Desert
+windowrulev2 = tag +games, class:^(steam_app_1503630)$
+windowrulev2 = fullscreen, class:^(steam_app_1503630)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1503630)$
+windowrulev2 = noblur, class:^(steam_app_1503630)$
+windowrulev2 = noshadow, class:^(steam_app_1503630)$
+windowrulev2 = immediate, class:^(steam_app_1503630)$
+
+# 24. Wallpaper Engine
+windowrulev2 = tag +games, class:^(steam_app_431960)$
+windowrulev2 = fullscreen, class:^(steam_app_431960)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_431960)$
+windowrulev2 = noblur, class:^(steam_app_431960)$
+windowrulev2 = noshadow, class:^(steam_app_431960)$
+windowrulev2 = immediate, class:^(steam_app_431960)$
+
+# 25. DayZ
+windowrulev2 = tag +games, class:^(steam_app_221100)$
+windowrulev2 = fullscreen, class:^(steam_app_221100)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_221100)$
+windowrulev2 = noblur, class:^(steam_app_221100)$
+windowrulev2 = noshadow, class:^(steam_app_221100)$
+windowrulev2 = immediate, class:^(steam_app_221100)$
+
+# 26. Team Fortress 2
+windowrulev2 = tag +games, class:^(steam_app_440)$
+windowrulev2 = fullscreen, class:^(steam_app_440)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_440)$
+windowrulev2 = noblur, class:^(steam_app_440)$
+windowrulev2 = noshadow, class:^(steam_app_440)$
+windowrulev2 = immediate, class:^(steam_app_440)$
+
+# 27. Baldur's Gate 3
+windowrulev2 = tag +games, class:^(steam_app_1086940)$
+windowrulev2 = fullscreen, class:^(steam_app_1086940)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1086940)$
+windowrulev2 = noblur, class:^(steam_app_1086940)$
+windowrulev2 = noshadow, class:^(steam_app_1086940)$
+windowrulev2 = immediate, class:^(steam_app_1086940)$
+
+# 28. Football Manager 2026
+windowrulev2 = tag +games, class:^(steam_app_2981600)$
+windowrulev2 = fullscreen, class:^(steam_app_2981600)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2981600)$
+windowrulev2 = noblur, class:^(steam_app_2981600)$
+windowrulev2 = noshadow, class:^(steam_app_2981600)$
+windowrulev2 = immediate, class:^(steam_app_2981600)$
+
+# 29. Stardew Valley
+windowrulev2 = tag +games, class:^(steam_app_413150)$
+windowrulev2 = fullscreen, class:^(steam_app_413150)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_413150)$
+windowrulev2 = noblur, class:^(steam_app_413150)$
+windowrulev2 = noshadow, class:^(steam_app_413150)$
+windowrulev2 = immediate, class:^(steam_app_413150)$
+
+# 30. Battlefield 6
+windowrulev2 = tag +games, class:^(steam_app_2042250)$
+windowrulev2 = fullscreen, class:^(steam_app_2042250)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2042250)$
+windowrulev2 = noblur, class:^(steam_app_2042250)$
+windowrulev2 = noshadow, class:^(steam_app_2042250)$
+windowrulev2 = immediate, class:^(steam_app_2042250)$
+
+# 31. Spacewar
+windowrulev2 = tag +games, class:^(steam_app_480)$
+windowrulev2 = fullscreen, class:^(steam_app_480)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_480)$
+windowrulev2 = noblur, class:^(steam_app_480)$
+windowrulev2 = noshadow, class:^(steam_app_480)$
+windowrulev2 = immediate, class:^(steam_app_480)$
+
+# 32. Hearts of Iron IV
+windowrulev2 = tag +games, class:^(steam_app_394360)$
+windowrulev2 = fullscreen, class:^(steam_app_394360)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_394360)$
+windowrulev2 = noblur, class:^(steam_app_394360)$
+windowrulev2 = noshadow, class:^(steam_app_394360)$
+windowrulev2 = immediate, class:^(steam_app_394360)$
+
+# 33. VRChat
+windowrulev2 = tag +games, class:^(steam_app_438100)$
+windowrulev2 = fullscreen, class:^(steam_app_438100)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_438100)$
+windowrulev2 = noblur, class:^(steam_app_438100)$
+windowrulev2 = noshadow, class:^(steam_app_438100)$
+windowrulev2 = immediate, class:^(steam_app_438100)$
+
+# 34. Heroes of Might and Magic: Olden Era
+windowrulev2 = tag +games, class:^(steam_app_2732400)$
+windowrulev2 = fullscreen, class:^(steam_app_2732400)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2732400)$
+windowrulev2 = noblur, class:^(steam_app_2732400)$
+windowrulev2 = noshadow, class:^(steam_app_2732400)$
+windowrulev2 = immediate, class:^(steam_app_2732400)$
+
+# 35. Diablo IV
+windowrulev2 = tag +games, class:^(steam_app_2344520)$
+windowrulev2 = fullscreen, class:^(steam_app_2344520)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2344520)$
+windowrulev2 = noblur, class:^(steam_app_2344520)$
+windowrulev2 = noshadow, class:^(steam_app_2344520)$
+windowrulev2 = immediate, class:^(steam_app_2344520)$
+
+# 36. Crosshair X
+windowrulev2 = tag +games, class:^(steam_app_1366560)$
+windowrulev2 = fullscreen, class:^(steam_app_1366560)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1366560)$
+windowrulev2 = noblur, class:^(steam_app_1366560)$
+windowrulev2 = noshadow, class:^(steam_app_1366560)$
+windowrulev2 = immediate, class:^(steam_app_1366560)$
+
+# 37. HELLDIVERS™ 2
+windowrulev2 = tag +games, class:^(steam_app_553850)$
+windowrulev2 = fullscreen, class:^(steam_app_553850)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_553850)$
+windowrulev2 = noblur, class:^(steam_app_553850)$
+windowrulev2 = noshadow, class:^(steam_app_553850)$
+windowrulev2 = immediate, class:^(steam_app_553850)$
+
+# 38. Euro Truck Simulator 2
+windowrulev2 = tag +games, class:^(steam_app_227300)$
+windowrulev2 = fullscreen, class:^(steam_app_227300)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_227300)$
+windowrulev2 = noblur, class:^(steam_app_227300)$
+windowrulev2 = noshadow, class:^(steam_app_227300)$
+windowrulev2 = immediate, class:^(steam_app_227300)$
+
+# 39. Farming Simulator 25
+windowrulev2 = tag +games, class:^(steam_app_2738600)$
+windowrulev2 = fullscreen, class:^(steam_app_2738600)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2738600)$
+windowrulev2 = noblur, class:^(steam_app_2738600)$
+windowrulev2 = noshadow, class:^(steam_app_2738600)$
+windowrulev2 = immediate, class:^(steam_app_2738600)$
+
+# 40. Call of Duty®
+windowrulev2 = tag +games, class:^(steam_app_1938090)$
+windowrulev2 = fullscreen, class:^(steam_app_1938090)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1938090)$
+windowrulev2 = noblur, class:^(steam_app_1938090)$
+windowrulev2 = noshadow, class:^(steam_app_1938090)$
+windowrulev2 = immediate, class:^(steam_app_1938090)$
+
+# 41. Elden Ring
+windowrulev2 = tag +games, class:^(steam_app_1245620)$
+windowrulev2 = fullscreen, class:^(steam_app_1245620)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1245620)$
+windowrulev2 = noblur, class:^(steam_app_1245620)$
+windowrulev2 = noshadow, class:^(steam_app_1245620)$
+windowrulev2 = immediate, class:^(steam_app_1245620)$
+
+# 42. Palworld
+windowrulev2 = tag +games, class:^(steam_app_1623730)$
+windowrulev2 = fullscreen, class:^(steam_app_1623730)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1623730)$
+windowrulev2 = noblur, class:^(steam_app_1623730)$
+windowrulev2 = noshadow, class:^(steam_app_1623730)$
+windowrulev2 = immediate, class:^(steam_app_1623730)$
+
+# 43. Cyberpunk 2077
+windowrulev2 = tag +games, class:^(steam_app_1091500)$
+windowrulev2 = fullscreen, class:^(steam_app_1091500)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1091500)$
+windowrulev2 = noblur, class:^(steam_app_1091500)$
+windowrulev2 = noshadow, class:^(steam_app_1091500)$
+windowrulev2 = immediate, class:^(steam_app_1091500)$
+
+# 44. Terraria
+windowrulev2 = tag +games, class:^(steam_app_105600)$
+windowrulev2 = fullscreen, class:^(steam_app_105600)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_105600)$
+windowrulev2 = noblur, class:^(steam_app_105600)$
+windowrulev2 = noshadow, class:^(steam_app_105600)$
+windowrulev2 = immediate, class:^(steam_app_105600)$
+
+# TModLoader
+windowrulev2 = tag +games, class:^(steam_app_1281930)$
+windowrulev2 = fullscreen, class:^(steam_app_1281930)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1281930)$
+windowrulev2 = noblur, class:^(steam_app_1281930)$
+windowrulev2 = noshadow, class:^(steam_app_1281930)$
+windowrulev2 = immediate, class:^(steam_app_1281930)$
+
+# 45. Sid Meier’s Civilization VI
+windowrulev2 = tag +games, class:^(steam_app_289070)$
+windowrulev2 = fullscreen, class:^(steam_app_289070)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_289070)$
+windowrulev2 = noblur, class:^(steam_app_289070)$
+windowrulev2 = noshadow, class:^(steam_app_289070)$
+windowrulev2 = immediate, class:^(steam_app_289070)$
+
+# 46. Monster Hunter: World
+windowrulev2 = tag +games, class:^(steam_app_582010)$
+windowrulev2 = fullscreen, class:^(steam_app_582010)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_582010)$
+windowrulev2 = noblur, class:^(steam_app_582010)$
+windowrulev2 = noshadow, class:^(steam_app_582010)$
+windowrulev2 = immediate, class:^(steam_app_582010)$
+
+# 47. Left 4 Dead 2
+windowrulev2 = tag +games, class:^(steam_app_550)$
+windowrulev2 = fullscreen, class:^(steam_app_550)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_550)$
+windowrulev2 = noblur, class:^(steam_app_550)$
+windowrulev2 = noshadow, class:^(steam_app_550)$
+windowrulev2 = immediate, class:^(steam_app_550)$
+
+# 48. Destiny 2
+windowrulev2 = tag +games, class:^(steam_app_1085660)$
+windowrulev2 = fullscreen, class:^(steam_app_1085660)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1085660)$
+windowrulev2 = noblur, class:^(steam_app_1085660)$
+windowrulev2 = noshadow, class:^(steam_app_1085660)$
+windowrulev2 = immediate, class:^(steam_app_1085660)$
+
+# 49. Red Dead Redemption 2
+windowrulev2 = tag +games, class:^(steam_app_1174180)$
+windowrulev2 = fullscreen, class:^(steam_app_1174180)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1174180)$
+windowrulev2 = noblur, class:^(steam_app_1174180)$
+windowrulev2 = noshadow, class:^(steam_app_1174180)$
+windowrulev2 = immediate, class:^(steam_app_1174180)$
+
+# 50. Sea of Thieves
+windowrulev2 = tag +games, class:^(steam_app_1172620)$
+windowrulev2 = fullscreen, class:^(steam_app_1172620)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1172620)$
+windowrulev2 = noblur, class:^(steam_app_1172620)$
+windowrulev2 = noshadow, class:^(steam_app_1172620)$
+windowrulev2 = immediate, class:^(steam_app_1172620)$
+
+# 51. Garry's Mod
+windowrulev2 = tag +games, class:^(steam_app_4000)$
+windowrulev2 = fullscreen, class:^(steam_app_4000)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_4000)$
+windowrulev2 = noblur, class:^(steam_app_4000)$
+windowrulev2 = noshadow, class:^(steam_app_4000)$
+windowrulev2 = immediate, class:^(steam_app_4000)$
+
+# 52. Factorio
+windowrulev2 = tag +games, class:^(steam_app_427520)$
+windowrulev2 = fullscreen, class:^(steam_app_427520)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_427520)$
+windowrulev2 = noblur, class:^(steam_app_427520)$
+windowrulev2 = noshadow, class:^(steam_app_427520)$
+windowrulev2 = immediate, class:^(steam_app_427520)$
+
+# 53. ARK: Survival Evolved
+windowrulev2 = tag +games, class:^(steam_app_346110)$
+windowrulev2 = fullscreen, class:^(steam_app_346110)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_346110)$
+windowrulev2 = noblur, class:^(steam_app_346110)$
+windowrulev2 = noshadow, class:^(steam_app_346110)$
+windowrulev2 = immediate, class:^(steam_app_346110)$
+
+# 54. Valheim
+windowrulev2 = tag +games, class:^(steam_app_892970)$
+windowrulev2 = fullscreen, class:^(steam_app_892970)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_892970)$
+windowrulev2 = noblur, class:^(steam_app_892970)$
+windowrulev2 = noshadow, class:^(steam_app_892970)$
+windowrulev2 = immediate, class:^(steam_app_892970)$
+
+# 55. Phasmophobia
+windowrulev2 = tag +games, class:^(steam_app_1364390)$
+windowrulev2 = fullscreen, class:^(steam_app_1364390)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1364390)$
+windowrulev2 = noblur, class:^(steam_app_1364390)$
+windowrulev2 = noshadow, class:^(steam_app_1364390)$
+windowrulev2 = immediate, class:^(steam_app_1364390)$
+
+# 56. Deep Rock Galactic
+windowrulev2 = tag +games, class:^(steam_app_548430)$
+windowrulev2 = fullscreen, class:^(steam_app_548430)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_548430)$
+windowrulev2 = noblur, class:^(steam_app_548430)$
+windowrulev2 = noshadow, class:^(steam_app_548430)$
+windowrulev2 = immediate, class:^(steam_app_548430)$
+
+# 57. RimWorld
+windowrulev2 = tag +games, class:^(steam_app_294100)$
+windowrulev2 = fullscreen, class:^(steam_app_294100)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_294100)$
+windowrulev2 = noblur, class:^(steam_app_294100)$
+windowrulev2 = noshadow, class:^(steam_app_294100)$
+windowrulev2 = immediate, class:^(steam_app_294100)$
+
+# 58. Hollow Knight
+windowrulev2 = tag +games, class:^(steam_app_367520)$
+windowrulev2 = fullscreen, class:^(steam_app_367520)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_367520)$
+windowrulev2 = noblur, class:^(steam_app_367520)$
+windowrulev2 = noshadow, class:^(steam_app_367520)$
+windowrulev2 = immediate, class:^(steam_app_367520)$
+
+# 59. Subnautica
+windowrulev2 = tag +games, class:^(steam_app_264710)$
+windowrulev2 = fullscreen, class:^(steam_app_264710)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_264710)$
+windowrulev2 = noblur, class:^(steam_app_264710)$
+windowrulev2 = noshadow, class:^(steam_app_264710)$
+windowrulev2 = immediate, class:^(steam_app_264710)$
+
+# 60. Cities: Skylines
+windowrulev2 = tag +games, class:^(steam_app_255710)$
+windowrulev2 = fullscreen, class:^(steam_app_255710)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_255710)$
+windowrulev2 = noblur, class:^(steam_app_255710)$
+windowrulev2 = noshadow, class:^(steam_app_255710)$
+windowrulev2 = immediate, class:^(steam_app_255710)$
+
+# 61. Project Zomboid
+windowrulev2 = tag +games, class:^(steam_app_108600)$
+windowrulev2 = fullscreen, class:^(steam_app_108600)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_108600)$
+windowrulev2 = noblur, class:^(steam_app_108600)$
+windowrulev2 = noshadow, class:^(steam_app_108600)$
+windowrulev2 = immediate, class:^(steam_app_108600)$
+
+# 62. The Sims 4
+windowrulev2 = tag +games, class:^(steam_app_1222670)$
+windowrulev2 = fullscreen, class:^(steam_app_1222670)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1222670)$
+windowrulev2 = noblur, class:^(steam_app_1222670)$
+windowrulev2 = noshadow, class:^(steam_app_1222670)$
+windowrulev2 = immediate, class:^(steam_app_1222670)$
+
+# 63. No Man's Sky
+windowrulev2 = tag +games, class:^(steam_app_275850)$
+windowrulev2 = fullscreen, class:^(steam_app_275850)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_275850)$
+windowrulev2 = noblur, class:^(steam_app_275850)$
+windowrulev2 = noshadow, class:^(steam_app_275850)$
+windowrulev2 = immediate, class:^(steam_app_275850)$
+
+# 64. Skyrim Special Edition
+windowrulev2 = tag +games, class:^(steam_app_489830)$
+windowrulev2 = fullscreen, class:^(steam_app_489830)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_489830)$
+windowrulev2 = noblur, class:^(steam_app_489830)$
+windowrulev2 = noshadow, class:^(steam_app_489830)$
+windowrulev2 = immediate, class:^(steam_app_489830)$
+
+# 65. Fallout 4
+windowrulev2 = tag +games, class:^(steam_app_377160)$
+windowrulev2 = fullscreen, class:^(steam_app_377160)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_377160)$
+windowrulev2 = noblur, class:^(steam_app_377160)$
+windowrulev2 = noshadow, class:^(steam_app_377160)$
+windowrulev2 = immediate, class:^(steam_app_377160)$
+
+# 66. Payday 2
+windowrulev2 = tag +games, class:^(steam_app_218620)$
+windowrulev2 = fullscreen, class:^(steam_app_218620)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_218620)$
+windowrulev2 = noblur, class:^(steam_app_218620)$
+windowrulev2 = noshadow, class:^(steam_app_218620)$
+windowrulev2 = immediate, class:^(steam_app_218620)$
+
+# 67. 7 Days to Die
+windowrulev2 = tag +games, class:^(steam_app_251570)$
+windowrulev2 = fullscreen, class:^(steam_app_251570)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_251570)$
+windowrulev2 = noblur, class:^(steam_app_251570)$
+windowrulev2 = noshadow, class:^(steam_app_251570)$
+windowrulev2 = immediate, class:^(steam_app_251570)$
+
+# 68. Total War: WARHAMMER III
+windowrulev2 = tag +games, class:^(steam_app_1142710)$
+windowrulev2 = fullscreen, class:^(steam_app_1142710)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1142710)$
+windowrulev2 = noblur, class:^(steam_app_1142710)$
+windowrulev2 = noshadow, class:^(steam_app_1142710)$
+windowrulev2 = immediate, class:^(steam_app_1142710)$
+
+# 69. Europa Universalis IV
+windowrulev2 = tag +games, class:^(steam_app_236850)$
+windowrulev2 = fullscreen, class:^(steam_app_236850)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_236850)$
+windowrulev2 = noblur, class:^(steam_app_236850)$
+windowrulev2 = noshadow, class:^(steam_app_236850)$
+windowrulev2 = immediate, class:^(steam_app_236850)$
+
+# 70. Stellaris
+windowrulev2 = tag +games, class:^(steam_app_281990)$
+windowrulev2 = fullscreen, class:^(steam_app_281990)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_281990)$
+windowrulev2 = noblur, class:^(steam_app_281990)$
+windowrulev2 = noshadow, class:^(steam_app_281990)$
+windowrulev2 = immediate, class:^(steam_app_281990)$
+
+# 71. Crusader Kings III
+windowrulev2 = tag +games, class:^(steam_app_1158310)$
+windowrulev2 = fullscreen, class:^(steam_app_1158310)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1158310)$
+windowrulev2 = noblur, class:^(steam_app_1158310)$
+windowrulev2 = noshadow, class:^(steam_app_1158310)$
+windowrulev2 = immediate, class:^(steam_app_1158310)$
+
+# 72. Satisfactory
+windowrulev2 = tag +games, class:^(steam_app_526870)$
+windowrulev2 = fullscreen, class:^(steam_app_526870)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_526870)$
+windowrulev2 = noblur, class:^(steam_app_526870)$
+windowrulev2 = noshadow, class:^(steam_app_526870)$
+windowrulev2 = immediate, class:^(steam_app_526870)$
+
+# 73. Risk of Rain 2
+windowrulev2 = tag +games, class:^(steam_app_632360)$
+windowrulev2 = fullscreen, class:^(steam_app_632360)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_632360)$
+windowrulev2 = noblur, class:^(steam_app_632360)$
+windowrulev2 = noshadow, class:^(steam_app_632360)$
+windowrulev2 = immediate, class:^(steam_app_632360)$
+
+# 74. Binding of Isaac: Rebirth
+windowrulev2 = tag +games, class:^(steam_app_250900)$
+windowrulev2 = fullscreen, class:^(steam_app_250900)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_250900)$
+windowrulev2 = noblur, class:^(steam_app_250900)$
+windowrulev2 = noshadow, class:^(steam_app_250900)$
+windowrulev2 = immediate, class:^(steam_app_250900)$
+
+# 75. Slay the Spire
+windowrulev2 = tag +games, class:^(steam_app_646570)$
+windowrulev2 = fullscreen, class:^(steam_app_646570)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_646570)$
+windowrulev2 = noblur, class:^(steam_app_646570)$
+windowrulev2 = noshadow, class:^(steam_app_646570)$
+windowrulev2 = immediate, class:^(steam_app_646570)$
+
+# 76. Hades
+windowrulev2 = tag +games, class:^(steam_app_1145360)$
+windowrulev2 = fullscreen, class:^(steam_app_1145360)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1145360)$
+windowrulev2 = noblur, class:^(steam_app_1145360)$
+windowrulev2 = noshadow, class:^(steam_app_1145360)$
+windowrulev2 = immediate, class:^(steam_app_1145360)$
+
+# 77. Dead Cells
+windowrulev2 = tag +games, class:^(steam_app_588650)$
+windowrulev2 = fullscreen, class:^(steam_app_588650)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_588650)$
+windowrulev2 = noblur, class:^(steam_app_588650)$
+windowrulev2 = noshadow, class:^(steam_app_588650)$
+windowrulev2 = immediate, class:^(steam_app_588650)$
+
+# 78. Path of Exile
+windowrulev2 = tag +games, class:^(steam_app_238960)$
+windowrulev2 = fullscreen, class:^(steam_app_238960)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_238960)$
+windowrulev2 = noblur, class:^(steam_app_238960)$
+windowrulev2 = noshadow, class:^(steam_app_238960)$
+windowrulev2 = immediate, class:^(steam_app_238960)$
+
+# 79. Warhaven
+windowrulev2 = tag +games, class:^(steam_app_1106750)$
+windowrulev2 = fullscreen, class:^(steam_app_1106750)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1106750)$
+windowrulev2 = noblur, class:^(steam_app_1106750)$
+windowrulev2 = noshadow, class:^(steam_app_1106750)$
+windowrulev2 = immediate, class:^(steam_app_1106750)$
+
+# 80. The Witcher 3: Wild Hunt
+windowrulev2 = tag +games, class:^(steam_app_292030)$
+windowrulev2 = fullscreen, class:^(steam_app_292030)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_292030)$
+windowrulev2 = noblur, class:^(steam_app_292030)$
+windowrulev2 = noshadow, class:^(steam_app_292030)$
+windowrulev2 = immediate, class:^(steam_app_292030)$
+
+# 81. Forza Horizon 5
+windowrulev2 = tag +games, class:^(steam_app_1551360)$
+windowrulev2 = fullscreen, class:^(steam_app_1551360)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1551360)$
+windowrulev2 = noblur, class:^(steam_app_1551360)$
+windowrulev2 = noshadow, class:^(steam_app_1551360)$
+windowrulev2 = immediate, class:^(steam_app_1551360)$
+
+# 82. Assetto Corsa
+windowrulev2 = tag +games, class:^(steam_app_244210)$
+windowrulev2 = fullscreen, class:^(steam_app_244210)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_244210)$
+windowrulev2 = noblur, class:^(steam_app_244210)$
+windowrulev2 = noshadow, class:^(steam_app_244210)$
+windowrulev2 = immediate, class:^(steam_app_244210)$
+
+# 83. BeamNG.drive
+windowrulev2 = tag +games, class:^(steam_app_284160)$
+windowrulev2 = fullscreen, class:^(steam_app_284160)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_284160)$
+windowrulev2 = noblur, class:^(steam_app_284160)$
+windowrulev2 = noshadow, class:^(steam_app_284160)$
+windowrulev2 = immediate, class:^(steam_app_284160)$
+
+# 84. American Truck Simulator
+windowrulev2 = tag +games, class:^(steam_app_270880)$
+windowrulev2 = fullscreen, class:^(steam_app_270880)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_270880)$
+windowrulev2 = noblur, class:^(steam_app_270880)$
+windowrulev2 = noshadow, class:^(steam_app_270880)$
+windowrulev2 = immediate, class:^(steam_app_270880)$
+
+# 85. SnowRunner
+windowrulev2 = tag +games, class:^(steam_app_1465360)$
+windowrulev2 = fullscreen, class:^(steam_app_1465360)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1465360)$
+windowrulev2 = noblur, class:^(steam_app_1465360)$
+windowrulev2 = noshadow, class:^(steam_app_1465360)$
+windowrulev2 = immediate, class:^(steam_app_1465360)$
+
+# 86. Escape from Tarkov (Non-Steam)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(EscapeFromTarkov)$
+
+# 87. League of Legends (Non-Steam)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(LeagueOfLegends.exe)$
+
+# 88. Valorant (Non-Steam)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(VALORANT-Win64-Shipping)$
+
+# 89. Genshin Impact (Non-Steam)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(GenshinImpact.exe)$
+
+# 90. Honkai: Star Rail (Non-Steam)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(StarRail.exe)$
+
+# 91. Minecraft (Prism Launcher/Native)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(PrismLauncher)$ ou class:^(Minecraft)$
+
+# 92. Roblox (Grapejuice/Vinegar)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(RobloxPlayerBeta.exe)$
+
+# 93. Fortnite (Non-Steam)
+# Para este jogo, você precisará encontrar a classe da janela usando `hyprctl clients | grep class`.
+# Exemplo: windowrulev2 = tag +games, class:^(FortniteClient-Win64-Shipping)$
+
+# 94. Rocket League
+windowrulev2 = tag +games, class:^(steam_app_1904500)$
+windowrulev2 = fullscreen, class:^(steam_app_1904500)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1904500)$
+windowrulev2 = noblur, class:^(steam_app_1904500)$
+windowrulev2 = noshadow, class:^(steam_app_1904500)$
+windowrulev2 = immediate, class:^(steam_app_1904500)$
+
+# 95. Fall Guys
+windowrulev2 = tag +games, class:^(steam_app_1097150)$
+windowrulev2 = fullscreen, class:^(steam_app_1097150)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1097150)$
+windowrulev2 = noblur, class:^(steam_app_1097150)$
+windowrulev2 = noshadow, class:^(steam_app_1097150)$
+windowrulev2 = immediate, class:^(steam_app_1097150)$
+
+# 96. Among Us
+windowrulev2 = tag +games, class:^(steam_app_945360)$
+windowrulev2 = fullscreen, class:^(steam_app_945360)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_945360)$
+windowrulev2 = noblur, class:^(steam_app_945360)$
+windowrulev2 = noshadow, class:^(steam_app_945360)$
+windowrulev2 = immediate, class:^(steam_app_945360)$
+
+# 97. Lethal Company
+windowrulev2 = tag +games, class:^(steam_app_1966720)$
+windowrulev2 = fullscreen, class:^(steam_app_1966720)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1966720)$
+windowrulev2 = noblur, class:^(steam_app_1966720)$
+windowrulev2 = noshadow, class:^(steam_app_1966720)$
+windowrulev2 = immediate, class:^(steam_app_1966720)$
+
+# 98. Content Warning
+windowrulev2 = tag +games, class:^(steam_app_2881650)$
+windowrulev2 = fullscreen, class:^(steam_app_2881650)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2881650)$
+windowrulev2 = noblur, class:^(steam_app_2881650)$
+windowrulev2 = noshadow, class:^(steam_app_2881650)$
+windowrulev2 = immediate, class:^(steam_app_2881650)$
+
+# 99. Buckshot Roulette
+windowrulev2 = tag +games, class:^(steam_app_2835570)$
+windowrulev2 = fullscreen, class:^(steam_app_2835570)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2835570)$
+windowrulev2 = noblur, class:^(steam_app_2835570)$
+windowrulev2 = noshadow, class:^(steam_app_2835570)$
+windowrulev2 = immediate, class:^(steam_app_2835570)$
+
+# 100. Manor Lords
+windowrulev2 = tag +games, class:^(steam_app_1363080)$
+windowrulev2 = fullscreen, class:^(steam_app_1363080)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_1363080)$
+windowrulev2 = noblur, class:^(steam_app_1363080)$
+windowrulev2 = noshadow, class:^(steam_app_1363080)$
+windowrulev2 = immediate, class:^(steam_app_1363080)$
+
+# 101. 9 Kings
+windowrulev2 = tag +games, class:^(steam_app_2784470)$
+windowrulev2 = fullscreen, class:^(steam_app_2784470)$
+windowrulev2 = workspace 10 silent, class:^(steam_app_2784470)$
+windowrulev2 = noblur, class:^(steam_app_2784470)$
+windowrulev2 = noshadow, class:^(steam_app_2784470)$
+windowrulev2 = immediate, class:^(steam_app_2784470)$
+
+# ── Bind: toggle GameMode ──────────────────────────────
+bind = SUPER, G,       exec, ~/.config/hypr/gamemode-on.sh
+bind = SUPER SHIFT, G, exec, ~/.config/hypr/gamemode-off.sh
+```
+
+> **Ver classe de uma janela**: `hyprctl clients | grep class`
+
+---
+
+## 3. Scripts GameMode
+
+**`~/.config/hypr/gamemode-on.sh`**
+```bash
+#!/bin/bash
+hyprctl keyword animations:enabled 0
+hyprctl keyword decoration:blur:enabled 0
+hyprctl keyword general:gaps_in 0
+hyprctl keyword general:gaps_out 0
+hyprctl keyword decoration:rounding 0
+notify-send "GameMode" "ON — animações desativadas"
+```
+
+**`~/.config/hypr/gamemode-off.sh`**
+```bash
+#!/bin/bash
+hyprctl reload
+notify-send "GameMode" "OFF — config restaurada"
+```
+
+```bash
+chmod +x ~/.config/hypr/gamemode-*.sh
+```
+
+---
+
+## 4. Plataformas — Opções de Lançamento
+
+| Plataforma | Comando recomendado |
+|---|---|
+| Steam nativo | `mangohud %command%` |
+| Steam + gamescope | `gamescope -f -r 144 -w 1920 -h 1080 -- %command%` |
+| Lutris (Epic/Battle.net) | Configurar runner Wine-GE ou Proton-GE no Lutris |
+| Jogos problemáticos | `gamescope -w 1920 -h 1080 -r 144 --adaptive-sync -- %command%` |
+| GameMode manual | `gamemoderun %command%` |
+
+---
+
+## 5. Troubleshooting
+
+| Problema | Solução |
+|---|---|
+| Stuttering / tearing | `gamescope --adaptive-sync` ou VRR no monitor |
+| FPS baixo | `gamemoderun steam`, governor CPU: `cpupower frequency-set -g performance` |
+| Fullscreen não funciona | Adicionar `windowrulev2 = fullscreen, class:^(nome_classe)$` |
+| Nvidia + Wayland | Seguir [wiki Nvidia do Hyprland](https://wiki.hyprland.org/Nvidia/) |
+| Anti-cheat (EAC/BattlEye) | Ativar no Proton: `PROTON_EAC_RUNTIME=1 %command%` |
+| Cursor sumindo | `WLR_NO_HARDWARE_CURSORS=1 %command%` (Nvidia) |
+
+---
+
+## 6. Overlay de FPS (MangoHud)
+
+```bash
+# ~/.config/MangoHud/MangoHud.conf
+fps
+frame_timing
+gpu_temp
+cpu_temp
+ram
+vram
+position=top-left
+```
+
+Uso: `mangohud game` ou `mangohud %command%` no Steam.
+
+---
+
+## Referências
+- [Hyprland Wiki](https://wiki.hyprland.org)
+- [Hyprland Nvidia](https://wiki.hyprland.org/Nvidia/)
+- [ProtonDB](https://www.protondb.com) — compatibilidade por jogo
+- [r/hyprland](https://reddit.com/r/hyprland) | [r/linux_gaming)

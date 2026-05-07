@@ -1,4 +1,4 @@
-# Skils
+# Skills
 Essas são minhas skills — use com moderação.
 ---
 1.hyprland-gaming
